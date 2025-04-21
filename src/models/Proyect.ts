@@ -2,14 +2,14 @@ import mongoose, { Schema, Document } from "mongoose";
 
 // Type para TypScript
 
-export type ProjectType = Document & {
+export interface iProject extends Document  {
     projectName: string
     clientName: string
     description: string
 }
 
-// Schema para Mongodb😄
-const ProjectSchema : Schema = new Schema({
+// Schema para Mongodb
+export const ProjectSchema : Schema = new Schema({
     projectName : {
         type: String,
         required: true,
@@ -27,5 +27,5 @@ const ProjectSchema : Schema = new Schema({
     }
 })
 
-const Project = mongoose.model<ProjectType>('Project', ProjectSchema)
+const Project = mongoose.model<iProject>('Project', ProjectSchema)
 export default Project
