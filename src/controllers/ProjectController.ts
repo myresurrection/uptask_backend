@@ -7,6 +7,7 @@ export class ProjectController {
 
         const project = new Project(req.body);
 
+
         try {
             await project.save();
             res.send('Proyecto creado correctamente...')
