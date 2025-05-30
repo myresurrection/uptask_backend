@@ -26,3 +26,4 @@ export async function projectExists(req: Request, res: Response, next: NextFunct
     }
 
 }
+
