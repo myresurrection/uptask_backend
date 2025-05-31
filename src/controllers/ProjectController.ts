@@ -25,7 +25,7 @@ export class ProjectController {
         try {
             const projects = await Project.find({
                 $or: [
-                    {manager: {$in: req.user.id}},
+                    { manager: { $in: req.user.id } },
                 ]
             })
             res.json(projects)
@@ -44,6 +44,14 @@ export class ProjectController {
             const project = await Project.findById(id).populate('tasks')
             if (!project) {
                 const error = new Error('Proyecto no encontrado')
+                res.status(404).json({ error: error.message })
+                return
+            }
+
+            // Verificar que el usuario autenticado sea el manager del proyecto
+
+            if (project.manager.toString() !== req.user.id.toString()) {
+                const error = new Error('Acción no válida')
                 res.status(404).json({ error: error.message })
                 return
             }
@@ -67,6 +75,15 @@ export class ProjectController {
                 res.status(404).json({ error: error.message })
                 return
             }
+
+            // Verificar que el usuario autenticado sea el manager del proyecto
+
+            if (project.manager.toString() !== req.user.id.toString()) {
+                const error = new Error('Solo el administrador del proyecto puede editarlo')
+                res.status(404).json({ error: error.message })
+                return
+            }
+
             project.clientName = req.body.clientName
             project.projectName = req.body.projectName
             project.description = req.body.description
@@ -88,6 +105,14 @@ export class ProjectController {
             const project = await Project.findById(id)
             if (!project) {
                 const error = new Error('Proyecto no encontrado')
+                res.status(404).json({ error: error.message })
+                return
+            }
+
+            // Verificar que el usuario autenticado sea el manager del proyecto
+
+            if (project.manager.toString() !== req.user.id.toString()) {
+                const error = new Error('Solo el administrador del proyecto puede eliminarlo')
                 res.status(404).json({ error: error.message })
                 return
             }

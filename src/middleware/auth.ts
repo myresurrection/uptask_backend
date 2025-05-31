@@ -25,7 +25,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         if (typeof decoded === 'object' && decoded.id) {
             const user = await User.findById(decoded.id).select('_id name email')
             if (user) {
-                req.user = user; // Agregar el usuario al objeto de solicitud
+                req.user = user;
+                next(); // Agregar el usuario al objeto de solicitud
             } else {
                 res.status(500).json({ error: 'Token no válido' });
 
@@ -36,5 +37,5 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         res.status(500).json({ error: 'Token no válido' });
         return;
     }
-    next();
+    
 }

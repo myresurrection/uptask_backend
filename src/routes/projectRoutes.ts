@@ -11,17 +11,18 @@ import { authenticate } from "../middleware/auth";
 
 const router = Router();
 
+// Verificar si el usuario está autenticado 
+router.use(authenticate);
 
 
 router.post('/',
-    authenticate,
     body('projectName').notEmpty().withMessage('El nombre del proyecto es Obligatorio'),
     body('clientName').notEmpty().withMessage('El nombre del cliente es Obligatorio'),
     body('description').notEmpty().withMessage('La descripción del proyecto es obligatoria'),
     handleInputErrors,
     ProjectController.createProject)
 
-router.get('/', authenticate, ProjectController.getAllProjects)
+router.get('/', ProjectController.getAllProjects)
 
 
 router.get('/:id',
