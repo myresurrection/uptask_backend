@@ -6,7 +6,9 @@ export class ProjectController {
     static createProject = async (req: Request, res: Response) => {
 
         const project = new Project(req.body);
-
+        // Asignar el manager del proyecto al usuario autenticado
+        project.manager = req.user.id
+        console.log(req.user)
 
         try {
             await project.save();
@@ -21,7 +23,11 @@ export class ProjectController {
 
     static getAllProjects = async (req: Request, res: Response) => {
         try {
-            const projects = await Project.find({})
+            const projects = await Project.find({
+                $or: [
+                    {manager: {$in: req.user.id}},
+                ]
+            })
             res.json(projects)
         } catch (error) {
             console.log(error)
@@ -87,7 +93,7 @@ export class ProjectController {
             }
             await project.deleteOne()
             res.send('Proyecto Eliminado')
-            
+
         } catch (error) {
             console.log(error)
         }

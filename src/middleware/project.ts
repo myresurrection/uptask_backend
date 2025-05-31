@@ -1,6 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import Project, { iProject } from '../models/Proyect';
 
+
+// Permite pasar valores de tipo iProject al objeto Request
 declare global {
     namespace Express {
         interface Request {

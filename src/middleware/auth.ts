@@ -1,6 +1,15 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
+import User, { iUser } from '../models/User';
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: iUser
+        }
+    }
+}
+
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     const bearer = req.headers.authorization;
     if (!bearer) {
@@ -14,8 +23,13 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         if (typeof decoded === 'object' && decoded.id) {
-            const user = await User.findById(decoded.id)
-            console.log(user);
+            const user = await User.findById(decoded.id).select('_id name email')
+            if (user) {
+                req.user = user; // Agregar el usuario al objeto de solicitud
+            } else {
+                res.status(500).json({ error: 'Token no válido' });
+
+            }
 
         }
     } catch (error) {
