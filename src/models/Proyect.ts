@@ -10,6 +10,7 @@ export interface iProject extends Document {
     description: string
     tasks: PopulatedDoc<iTask & Document>[]
     manager: PopulatedDoc<iUser & Document>
+    team: PopulatedDoc<iUser & Document>[]
 }
 
 // Schema para Mongodb
@@ -38,7 +39,14 @@ export const ProjectSchema: Schema = new Schema({
     manager: {
         type: Types.ObjectId,
         ref: 'User'
-    }
+    },
+    team: [
+        {
+            type: Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+
 }, { timestamps: true })
 
 const Project = mongoose.model<iProject>('Project', ProjectSchema)
