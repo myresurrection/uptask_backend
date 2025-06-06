@@ -26,6 +26,7 @@ export class ProjectController {
             const projects = await Project.find({
                 $or: [
                     { manager: { $in: req.user.id } },
+                    { team: {$in : req.user.id} }
                 ]
             })
             res.json(projects)
@@ -50,7 +51,7 @@ export class ProjectController {
 
             // Verificar que el usuario autenticado sea el manager del proyecto
 
-            if (project.manager.toString() !== req.user.id.toString()) {
+            if (project.manager.toString() !== req.user.id.toString() && !project.team.includes(req.user.id)) {
                 const error = new Error('Acción no válida')
                 res.status(404).json({ error: error.message })
                 return
