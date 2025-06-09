@@ -1,5 +1,4 @@
-import mongoose from 'mongoose'
-import mongose, { Schema, Document, Types } from 'mongoose'
+import mongoose, { Schema, Document, Types } from 'mongoose'
 
 export interface INote extends Document {
     content: string
@@ -19,13 +18,13 @@ const NoteSchema: Schema = new Schema({
         required: true
     },
     task: {
-        createdBy: {
-            type: Types.ObjectId,
-            ref: 'Task',
-            required: true
-        }
+
+        type: Types.ObjectId,
+        ref: 'Task',
+        required: true
+
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 
 const Note = mongoose.model<INote>('Note', NoteSchema)
