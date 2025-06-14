@@ -67,7 +67,7 @@ export class AuthController {
                 user.save(),
                 tokenExists.deleteOne()
             ])
-            res.send('Cuenta confirmada correctamente')
+            res.send('Cuenta confirmada. Iniciá Sesión')
         } catch (error) {
             // console.log(error)
             res.status(500).json({ error: 'Hubo un error' })
